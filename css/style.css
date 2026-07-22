@@ -13,7 +13,8 @@
   --ease:cubic-bezier(.22,.61,.36,1);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;overflow-x:clip}
+body{overflow-x:clip}
 body{font-family:var(--fb);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;line-height:1.5}
 img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
@@ -150,6 +151,8 @@ header.solid .burger span{background:var(--ink)}
 .chip input:checked+span{background:var(--accent);border-color:var(--accent);color:#fff}
 .chip input:focus-visible+span{box-shadow:0 0 0 3px rgba(31,77,58,.3)}
 .form .btn-primary{margin-top:8px}
+.btn-ghost{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;padding:13px 24px;border-radius:980px;background:transparent;border:1px solid var(--line);color:var(--ink);font-family:var(--fb);font-size:.95rem;font-weight:600;cursor:pointer;transition:.25s var(--ease)}
+.btn-ghost:hover{border-color:var(--ink);background:var(--bg-soft)}
 .form-note{margin-top:12px;font-size:.86rem;color:var(--ink-soft);text-align:center}
 .form-ok{margin-top:14px;padding:14px 16px;border-radius:12px;background:#eaf5ef;color:var(--accent);font-size:.92rem;font-weight:500;text-align:center}
 .field.invalid input{border-color:#c0392b;background:#fdecea}
@@ -180,7 +183,15 @@ footer{border-top:1px solid var(--line);padding:64px 0 40px}
 .we-note{font-size:.7em;font-weight:400;letter-spacing:0;text-transform:none;opacity:.7}
 .tarif-duo{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:0}
 .tarif-note{margin-top:48px;font-size:.95rem;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:24px}
-@media(max-width:640px){.tarif-duo{grid-template-columns:1fr}}
+@media(max-width:640px){
+  .tarif-duo{grid-template-columns:1fr}
+  /* tableaux : tout tient dans l'écran, plus de colonne coupée */
+  .tarif-table{min-width:0}
+  .tarif-table th,.tarif-table td{padding:11px 8px;font-size:.85rem}
+  .tarif-table th{font-size:.62rem;letter-spacing:.05em}
+  .tarif-table td:first-child{padding-left:0}
+  .tarif-table th:first-child{padding-left:0}
+}
 
 /* ---------- INTRO 3D OVERLAY ---------- */
 html.intro-lock,html.intro-lock body{overflow:hidden;height:100%}
