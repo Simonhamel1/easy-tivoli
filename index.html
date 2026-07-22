@@ -3,23 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Easy Tivoli — Location de chapiteaux & jeux de réception</title>
-<meta name="description" content="Location de chapiteaux, tivolis, mobilier et jeux de réception. Livrés et montés chez vous pour vos mariages, anniversaires et fêtes de famille.">
+<title>Easy Tivoli — Location de tivolis, mobilier & jeux de réception</title>
+<meta name="description" content="Location de tivolis pliants, tables, bancs, mange-debout et jeux de réception. Livraison et montage possibles pour vos mariages, anniversaires et fêtes de famille.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.169.0/build/three.module.js" } }
+</script>
 </head>
 <body>
 
+<!-- INTRO 3D (overlay plein écran, retiré après l'animation) -->
+<div id="intro" aria-hidden="true">
+  <canvas id="introCanvas"></canvas>
+  <div class="intro-hint">cliquez pour passer</div>
+</div>
+
+<!-- Barre de progression de défilement -->
+<div class="scroll-bar" id="scrollBar"></div>
+
 <header id="header">
   <div class="bar">
-    <a href="#" class="logo">Easy <b>Tivoli</b></a>
+    <a href="#" class="logo">
+      <img src="images/logo.png" alt="Easy Tivoli" class="logo-img">
+    </a>
     <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
     <nav class="menu" id="menu">
-      <a href="#chapiteau">Chapiteaux</a>
+      <a href="#tivolis">Tivolis</a>
+      <a href="#mobilier">Mobilier</a>
       <a href="#jeux">Jeux</a>
-      <a href="#process">Comment ça marche</a>
+      <a href="#tarifs">Tarifs</a>
       <a href="https://www.instagram.com/easy.tivoli/" target="_blank" rel="noopener">Instagram</a>
       <a href="#contact" class="nav-btn">Demander une date</a>
     </nav>
@@ -27,13 +42,13 @@
 </header>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="photo" id="heroPhoto" style="background-image:url('images/chapiteau.jpg')"></div>
+<section class="hero" id="top">
+  <div class="photo" id="heroPhoto" style="background-image:url('images/tivoli.png')"></div>
   <div class="scrim"></div>
   <div class="wrap inner">
-    <div class="kicker">Location de matériel de réception</div>
-    <h1>L'abri, le mobilier<br>et les jeux — <em>livrés<br>et montés chez vous.</em></h1>
-    <p class="sub">Chapiteaux, tables et jeux de réception pour vos mariages, anniversaires et fêtes de famille.</p>
+    <div class="kicker rv">Location de matériel de réception</div>
+    <h1 class="rv d1">L'abri, le mobilier<br>et les jeux — <em>livrés<br>et montés chez vous.</em></h1>
+    <p class="sub rv d2">Tivolis pliants, tables, bancs, mange-debout et jeux de réception pour vos mariages, anniversaires et fêtes de famille.</p>
   </div>
   <div class="wrap cues"><span class="ln"></span><span>Découvrir</span></div>
 </section>
@@ -43,39 +58,146 @@
   <div class="wrap">
     <p class="rv">On installe le décor, vous recevez. De la structure au dernier banc, tout est livré, monté et récupéré par nos soins.</p>
     <div class="side rv d1">
-      <p>Basés dans votre région, nous accompagnons les particuliers et les associations pour des événements de 20 à 200 personnes. Chaque prestation est préparée sur mesure, selon votre lieu, votre date et votre nombre d'invités.</p>
+      <p>Basés dans votre région, nous accompagnons les particuliers et les associations pour des anniversaires, mariages, barbecues et fêtes de quartier. Chaque prestation est ajustée selon votre lieu, votre date et vos besoins.</p>
     </div>
   </div>
 </section>
 
-<!-- PRODUIT 1 : CHAPITEAU -->
-<section class="product" id="chapiteau">
-  <div class="media"><div class="img" style="background-image:url('images/chapiteau.jpg')"></div></div>
+<!-- PRODUIT 1 : TIVOLIS -->
+<section class="product" id="tivolis">
+  <div class="media"><div class="img tilt" data-depth="1" style="background-image:url('images/tivoli.png')"></div></div>
   <div class="copy">
-    <div class="idx rv">Chapiteaux & tivolis</div>
-    <h3 class="rv d1">Un abri qui a de l'allure, prêt en moins d'une heure</h3>
-    <p class="desc rv d1">Notre barnum pliant abrite vos invités du soleil comme d'une averse. En bord de piscine, sur une terrasse ou en plein champ, il s'adapte à votre terrain — parois latérales selon la météo.</p>
+    <div class="idx rv">Tivolis pliants blancs</div>
+    <h3 class="rv d1">Un abri avec parois latérales, prêt en 5 minutes</h3>
+    <p class="desc rv d1">Nos barnums blancs avec parois latérales fermables s'adaptent à toutes les configurations — bord de piscine, terrasse, champ ou jardin. Stables par vent grâce aux 8 poids de lestage. Se range à 1,70 m, rentre dans un coffre de voiture.</p>
     <ul class="specs rv d2">
-      <li><span>Dimensions</span><span>3 × 6 m</span></li>
-      <li><span>Capacité</span><span>≈ 30 personnes</span></li>
-      <li><span>Toile</span><span>Crème, occultante</span></li>
-      <li><span>Prestation</span><span>Livraison & montage inclus</span></li>
+      <li><span>Grand tivoli</span><span>6 × 3 m — 4 disponibles</span></li>
+      <li><span>Petit tivoli</span><span>3 × 3 m — 4 disponibles</span></li>
+      <li><span>Parois latérales</span><span>Incluses, fermables</span></li>
+      <li><span>Montage</span><span>5 min — livraison & installation possibles</span></li>
     </ul>
   </div>
 </section>
 
-<!-- PRODUIT 2 : JEUX -->
+<!-- PRODUIT 2 : MOBILIER -->
+<section class="product flip" id="mobilier">
+  <div class="media"><div class="img tilt" data-depth="1" style="background-image:url('images/table.png')"></div></div>
+  <div class="copy">
+    <div class="idx rv">Tables, bancs & chaises</div>
+    <h3 class="rv d1">Tout le mobilier pour asseoir et régaler</h3>
+    <p class="desc rv d1">Tables rectangulaires longue durée, bancs robustes, chaises en teck ou en bois — de quoi dresser une vraie tablée. Livraison et récupération possibles avec les tivolis.</p>
+    <ul class="specs rv d2">
+      <li><span>Tables rectangulaires 1,80 m</span><span>9 (6 pers. chacune)</span></li>
+      <li><span>Table ronde</span><span>1 (8 pers.)</span></li>
+      <li><span>Bancs</span><span>14 (3 pers. chacun)</span></li>
+      <li><span>Chaises teck pliantes</span><span>8</span></li>
+      <li><span>Chaises classiques bois</span><span>6</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- PRODUIT 3 : MANGE-DEBOUT -->
+<section class="product" id="mangedebout">
+  <div class="media"><div class="img tilt" data-depth="1" style="background-image:url('images/table_haute.png')"></div></div>
+  <div class="copy">
+    <div class="idx rv">Mange-debout</div>
+    <h3 class="rv d1">L'élégance du cocktail, en plein air</h3>
+    <p class="desc rv d1">Parfaits pour un apéro debout, un cocktail dînatoire ou un coin ambiance à côté de la piste. Disponibles avec housse noire ou blanche pour un rendu soigné.</p>
+    <ul class="specs rv d2">
+      <li><span>Mange-debout Ø 0,80 m</span><span>6 disponibles</span></li>
+      <li><span>Housses</span><span>Noire ou blanche, en option</span></li>
+    </ul>
+    <div class="tiles rv d3">
+      <div class="t tilt" data-depth="2"><div class="n">01</div><h4>Sans housse</h4><p>7 €/jour — 9 €/week-end</p></div>
+      <div class="t tilt" data-depth="2"><div class="n">02</div><h4>Avec housse</h4><p>12 €/jour — 14 €/week-end</p></div>
+      <div class="t tilt" data-depth="2"><div class="n">03</div><h4>Housse seule</h4><p>5 € à l'unité</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUIT 4 : JEUX -->
 <section class="product flip" id="jeux">
-  <div class="media"><div class="img" style="background-image:url('images/jeux.jpg')"></div></div>
+  <div class="media"><div class="img tilt" data-depth="1" style="background-image:url('images/jeux.png')"></div></div>
   <div class="copy">
     <div class="idx rv">La zone jeux</div>
     <h3 class="rv d1">Le supplément d'âme qui fait durer la soirée</h3>
-    <p class="desc rv d1">Nos jeux géants en bois rassemblent petits et grands. Le Puissance 4 format XXL est notre pièce maîtresse, accompagné du cornhole et du jeu de palet sur ardoise.</p>
+    <p class="desc rv d1">Nos jeux géants en bois rassemblent petits et grands. Le Puissance 4 format XXL est notre pièce maîtresse, accompagné du cornhole et du jeu de palet. Réservables ensemble à prix réduit.</p>
     <div class="tiles rv d2">
-      <div class="t"><div class="n">01</div><h4>Puissance 4 géant</h4><p>En bois massif, le duel star de la fête.</p></div>
-      <div class="t"><div class="n">02</div><h4>Cornhole</h4><p>Jeu de sacs rouge & bleu, adresse et fous rires.</p></div>
-      <div class="t"><div class="n">03</div><h4>Palet sur ardoise</h4><p>Le classique convivial, à toute heure.</p></div>
+      <div class="t tilt" data-depth="2"><div class="n">01</div><h4>Puissance 4 géant</h4><p>En bois massif, le duel star de la fête.</p></div>
+      <div class="t tilt" data-depth="2"><div class="n">02</div><h4>Cornhole</h4><p>8 sacs, adresse et fous rires garantis.</p></div>
+      <div class="t tilt" data-depth="2"><div class="n">03</div><h4>Palet sur plomb</h4><p>Plaque plomb, 12 palets — le classique convivial.</p></div>
     </div>
+  </div>
+</section>
+
+<!-- TARIFS -->
+<section class="section tarifs" id="tarifs">
+  <div class="wrap">
+    <div class="eyebrow rv">Tarifs</div>
+    <h2 class="h2 rv d1">Des prix clairs, <em>sans surprise</em></h2>
+
+    <div class="tarif-block rv d2">
+      <h3 class="tarif-cat">Tivolis pliants blancs avec parois latérales</h3>
+      <div class="tarif-scroll">
+        <table class="tarif-table">
+          <thead>
+            <tr><th>Article</th><th>Jour</th><th>Week-end <span class="we-note">ven → lun</span></th><th>Caution</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>6 × 3 m</td><td>50 €</td><td>80 €</td><td>200 €</td></tr>
+            <tr><td>3 × 3 m</td><td>30 €</td><td>40 €</td><td>100 €</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tarif-block rv d2">
+      <h3 class="tarif-cat">Mobilier</h3>
+      <div class="tarif-scroll">
+        <table class="tarif-table">
+          <thead>
+            <tr><th>Article</th><th>Jour</th><th>Week-end</th><th>Caution</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Table rectangulaire 1,80 m (6 pers.)</td><td>7 €</td><td>9 €</td><td>100 €</td></tr>
+            <tr><td>Banc (3 pers.)</td><td>4 €</td><td>5 €</td><td>100 €</td></tr>
+            <tr><td>Mange-debout Ø 0,80 m</td><td>7 €</td><td>9 €</td><td>100 €</td></tr>
+            <tr><td>Mange-debout + housse (noire ou blanche)</td><td>12 €</td><td>14 €</td><td>100 €</td></tr>
+            <tr><td>Housse seule</td><td colspan="2">5 € / unité</td><td>—</td></tr>
+            <tr><td>Chaises (teck pliantes ou classiques bois)</td><td>15 €</td><td>30 €</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tarif-duo rv d3">
+      <div class="tarif-block">
+        <h3 class="tarif-cat">Guirlandes guinguette</h3>
+        <div class="tarif-scroll">
+          <table class="tarif-table">
+            <tbody>
+              <tr><td>10 m</td><td>10 €</td></tr>
+              <tr><td>30 m</td><td>20 €</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="tarif-block">
+        <h3 class="tarif-cat">Jeux</h3>
+        <div class="tarif-scroll">
+          <table class="tarif-table">
+            <tbody>
+              <tr><td>Cornhole (8 sacs)</td><td>20 €</td></tr>
+              <tr><td>Puissance 4 géant</td><td>20 €</td></tr>
+              <tr><td>Palets (plaque plomb, 12 palets)</td><td>20 €</td></tr>
+              <tr><td><strong>Les 3 jeux ensemble</strong></td><td><strong>50 €</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <p class="tarif-note rv d3">Livraison et installation disponibles pour les tivolis et le mobilier — nous contacter pour la majoration selon la distance.</p>
   </div>
 </section>
 
@@ -85,45 +207,96 @@
     <div class="eyebrow rv">Comment ça marche</div>
     <h2 class="h2 rv d1">De l'idée à la fête, <em>en trois temps</em></h2>
     <div class="steps">
-      <div class="step rv d1"><div class="num"><b>1</b></div><h4>Vous nous écrivez</h4><p>Un message avec votre date, le lieu et le nombre d'invités. On vérifie les disponibilités.</p></div>
-      <div class="step rv d2"><div class="num"><b>2</b></div><h4>On compose le pack</h4><p>Chapiteau, mobilier, jeux : un ensemble ajusté à votre événement, avec un devis clair.</p></div>
+      <div class="step rv d1"><div class="num"><b>1</b></div><h4>Vous nous écrivez</h4><p>Un message avec votre date, le lieu et le nombre d'invités. On vérifie les disponibilités et on vous répond vite.</p></div>
+      <div class="step rv d2"><div class="num"><b>2</b></div><h4>On compose le pack</h4><p>Tivolis, mobilier, jeux : un ensemble ajusté à votre événement, avec un devis clair.</p></div>
       <div class="step rv d3"><div class="num"><b>3</b></div><h4>On installe tout</h4><p>Livraison, montage et récupération le jour venu. Vous n'avez plus qu'à profiter.</p></div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="cta" id="contact">
-  <div class="wrap">
-    <h2 class="rv">Une date en tête ?<br><em>Parlons-en.</em></h2>
-    <p class="rv d1">Écrivez-nous en message privé, on répond vite avec un devis.</p>
-    <a class="link-btn rv d2" href="https://www.instagram.com/easy.tivoli/" target="_blank" rel="noopener">Nous écrire sur Instagram <span class="arw">→</span></a>
+<!-- CONTACT / FORMULAIRE -->
+<section class="contact" id="contact">
+  <div class="wrap contact-grid">
+    <div class="contact-intro">
+      <div class="eyebrow rv">Demander une date</div>
+      <h2 class="rv d1">Réservez votre matériel<br><em>en deux minutes.</em></h2>
+      <p class="rv d1">Dites-nous l'essentiel : on revient vers vous très vite avec les disponibilités et un devis clair.</p>
+      <ul class="assur rv d2">
+        <li>Réponse rapide en message privé</li>
+        <li>Devis gratuit et sans engagement</li>
+        <li>Livraison & installation en option</li>
+      </ul>
+    </div>
+
+    <form class="form rv d1" id="devisForm" novalidate>
+      <div class="field">
+        <label for="f-nom">Votre nom</label>
+        <input id="f-nom" name="nom" type="text" autocomplete="name" placeholder="Prénom Nom" required>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label for="f-date">Date de l'événement</label>
+          <input id="f-date" name="date" type="date" required>
+        </div>
+        <div class="field">
+          <label for="f-invites">Nombre d'invités</label>
+          <input id="f-invites" name="invites" type="number" min="1" inputmode="numeric" placeholder="ex. 40">
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-lieu">Commune / lieu</label>
+        <input id="f-lieu" name="lieu" type="text" placeholder="Ville ou code postal">
+      </div>
+      <div class="field">
+        <span class="label">Matériel souhaité</span>
+        <div class="chips">
+          <label class="chip"><input type="checkbox" name="materiel" value="Tivolis"><span>Tivolis</span></label>
+          <label class="chip"><input type="checkbox" name="materiel" value="Mobilier"><span>Mobilier</span></label>
+          <label class="chip"><input type="checkbox" name="materiel" value="Mange-debout"><span>Mange-debout</span></label>
+          <label class="chip"><input type="checkbox" name="materiel" value="Jeux"><span>Jeux</span></label>
+          <label class="chip"><input type="checkbox" name="materiel" value="Guirlandes"><span>Guirlandes</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-msg">Message (facultatif)</label>
+        <textarea id="f-msg" name="message" rows="3" placeholder="Précisez votre besoin…"></textarea>
+      </div>
+      <button type="submit" class="btn-primary">Envoyer ma demande <span class="arw">→</span></button>
+      <p class="form-note">On ouvre Instagram avec votre récapitulatif prêt à coller.</p>
+      <div class="form-ok" id="formOk" hidden>Récapitulatif copié ✓ — collez-le dans le message Instagram qui vient de s'ouvrir.</div>
+    </form>
   </div>
 </section>
 
 <footer>
   <div class="wrap foot">
     <div>
-      <a href="#" class="logo">Easy <b>Tivoli</b></a>
-      <p style="margin-top:14px;max-width:26ch;color:var(--ink-soft);font-size:.95rem">Location de chapiteaux, tivolis et jeux de réception.</p>
+      <a href="#" class="logo">
+        <img src="images/logo.png" alt="Easy Tivoli" class="logo-img">
+      </a>
+      <p style="margin-top:14px;max-width:26ch;color:var(--ink-soft);font-size:.95rem">Location de tivolis, mobilier et jeux de réception.</p>
     </div>
     <div class="cols">
       <div>
         <h5>Le matériel</h5>
-        <a href="#chapiteau">Chapiteaux</a>
-        <a href="#jeux">Puissance 4 géant</a>
-        <a href="#jeux">Jeux en bois</a>
+        <a href="#tivolis">Tivolis</a>
+        <a href="#mobilier">Mobilier & tables</a>
+        <a href="#mangedebout">Mange-debout</a>
+        <a href="#jeux">Jeux</a>
       </div>
       <div>
-        <h5>Contact</h5>
+        <h5>Infos</h5>
+        <a href="#tarifs">Tarifs</a>
+        <a href="#process">Comment ça marche</a>
         <a href="https://www.instagram.com/easy.tivoli/" target="_blank" rel="noopener">Instagram</a>
         <a href="#contact">Demander une date</a>
       </div>
     </div>
-    <div class="end">© 2026 Easy Tivoli — Maquette de démonstration.</div>
+    <div class="end">© 2026 Easy Tivoli</div>
   </div>
 </footer>
 
+<script type="module" src="js/intro3d.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

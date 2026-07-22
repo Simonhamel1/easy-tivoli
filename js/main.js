@@ -1,14 +1,23 @@
-// Easy Tivoli — interactions
+// Easy Tivoli — interactions & effets de scroll
 document.addEventListener('DOMContentLoaded', () => {
 
-  // Header : fond blanc une fois le hero passé
   const header = document.getElementById('header');
   const hero = document.querySelector('.hero');
-  window.addEventListener('scroll', () => {
-    header.classList.toggle('solid', window.scrollY > hero.offsetHeight - 90);
-  }, { passive: true });
+  const scrollBar = document.getElementById('scrollBar');
+  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const canHover = matchMedia('(hover:hover) and (pointer:fine)').matches;
 
-  // Menu mobile (burger)
+  // --- Header : fond blanc une fois le hero passé + barre de progression ---
+  function onScrollUI() {
+    header.classList.toggle('solid', window.scrollY > hero.offsetHeight - 90);
+    const h = document.documentElement;
+    const max = h.scrollHeight - h.clientHeight;
+    if (scrollBar) scrollBar.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
+  }
+  window.addEventListener('scroll', onScrollUI, { passive: true });
+  onScrollUI();
+
+  // --- Menu mobile (burger) ---
   const burger = document.getElementById('burger');
   const menu = document.getElementById('menu');
   burger.addEventListener('click', () => {
@@ -22,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   );
 
-  // Apparition des blocs au défilement
+  // --- Apparition des blocs au défilement ---
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) {
@@ -33,25 +42,132 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { threshold: 0.16 });
   document.querySelectorAll('.rv').forEach(el => io.observe(el));
 
-  // Léger parallaxe sur les photos (désactivé si mouvement réduit)
-  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
-  if (!reduce) {
-    const hp = document.getElementById('heroPhoto');
-    const imgs = [...document.querySelectorAll('.product .img')];
-    let ticking = false;
-    function px() {
-      const y = window.scrollY;
-      if (hp) hp.style.transform = `scale(1.06) translateY(${y * 0.12}px)`;
-      imgs.forEach(im => {
-        const r = im.getBoundingClientRect();
-        const off = (r.top + r.height / 2 - window.innerHeight / 2) / window.innerHeight;
-        im.style.transform = `scale(1.08) translateY(${off * -24}px)`;
+  if (reduce) return; // pas de parallaxe ni de tilt si mouvement réduit
+
+  // --- Parallaxe + tilt 3D des visuels ---
+  const hp = document.getElementById('heroPhoto');
+  // état par image produit : parallaxe (scroll) + inclinaison (souris)
+  const media = [...document.querySelectorAll('.product .media')].map(m => ({
+    box: m,
+    img: m.querySelector('.img'),
+    py: 0, rx: 0, ry: 0
+  }));
+
+  function applyImg(o) {
+    o.img.style.transform =
+      `scale(1.08) translateY(${o.py}px) rotateX(${o.rx}deg) rotateY(${o.ry}deg)`;
+  }
+
+  let ticking = false;
+  function parallax() {
+    const y = window.scrollY;
+    if (hp) hp.style.transform = `scale(1.06) translateY(${y * 0.12}px)`;
+    media.forEach(o => {
+      const r = o.img.getBoundingClientRect();
+      const off = (r.top + r.height / 2 - window.innerHeight / 2) / window.innerHeight;
+      o.py = off * -26;
+      applyImg(o);
+    });
+    ticking = false;
+  }
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(parallax); ticking = true; }
+  }, { passive: true });
+  parallax();
+
+  // Inclinaison au survol de la souris (desktop uniquement)
+  if (canHover) {
+    media.forEach(o => {
+      o.box.addEventListener('pointermove', e => {
+        const r = o.box.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;   // -0.5 → 0.5
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        o.ry = px * 8;
+        o.rx = py * -8;
+        applyImg(o);
       });
-      ticking = false;
-    }
-    window.addEventListener('scroll', () => {
-      if (!ticking) { requestAnimationFrame(px); ticking = true; }
-    }, { passive: true });
-    px();
+      o.box.addEventListener('pointerleave', () => {
+        o.rx = 0; o.ry = 0; applyImg(o);
+      });
+    });
+  }
+
+  // --- Réveil doux du hero une fois l'intro 3D terminée ---
+  document.addEventListener('intro:done', () => {
+    document.querySelectorAll('.hero .rv').forEach(el => el.classList.add('in'));
+  });
+
+  // --- Formulaire de demande : récapitulatif + ouverture Instagram ---
+  const form = document.getElementById('devisForm');
+  if (form) {
+    const INSTA = 'https://www.instagram.com/easy.tivoli/';
+    const ok = document.getElementById('formOk');
+
+    const markInvalid = (input, bad) => {
+      input.closest('.field').classList.toggle('invalid', bad);
+    };
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+
+      const nom = form.nom.value.trim();
+      const date = form.date.value;
+      const invites = form.invites.value.trim();
+      const lieu = form.lieu.value.trim();
+      const message = form.message.value.trim();
+      const materiel = [...form.querySelectorAll('input[name="materiel"]:checked')].map(c => c.value);
+
+      // Validation minimale : nom + date
+      let bad = false;
+      if (!nom) { markInvalid(form.nom, true); bad = true; } else markInvalid(form.nom, false);
+      if (!date) { markInvalid(form.date, true); bad = true; } else markInvalid(form.date, false);
+      if (bad) { form.querySelector('.field.invalid input').focus(); return; }
+
+      // Date lisible (jj/mm/aaaa)
+      let dateFr = date;
+      const d = new Date(date + 'T00:00');
+      if (!isNaN(d)) dateFr = d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
+
+      const lignes = [
+        'Bonjour Easy Tivoli, je souhaite réserver du matériel :',
+        '',
+        `• Nom : ${nom}`,
+        `• Date : ${dateFr}`,
+      ];
+      if (invites) lignes.push(`• Invités : ${invites}`);
+      if (lieu) lignes.push(`• Lieu : ${lieu}`);
+      if (materiel.length) lignes.push(`• Matériel : ${materiel.join(', ')}`);
+      if (message) lignes.push(`• Précisions : ${message}`);
+      lignes.push('', 'Merci de me communiquer les disponibilités et un devis.');
+      const recap = lignes.join('\n');
+
+      // Copie dans le presse-papier (avec repli textarea)
+      let copied = false;
+      try {
+        await navigator.clipboard.writeText(recap);
+        copied = true;
+      } catch (_) {
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = recap;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          copied = document.execCommand('copy');
+          document.body.removeChild(ta);
+        } catch (__) { copied = false; }
+      }
+
+      if (ok) {
+        ok.textContent = copied
+          ? 'Récapitulatif copié ✓ — collez-le dans le message Instagram qui vient de s\'ouvrir.'
+          : 'Instagram s\'ouvre — écrivez-nous votre demande, on répond vite !';
+        ok.hidden = false;
+      }
+
+      // Ouvre la messagerie Instagram (geste utilisateur → autorisé)
+      window.open(INSTA, '_blank', 'noopener');
+    });
   }
 });
